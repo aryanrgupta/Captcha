@@ -1,0 +1,714 @@
+<!--
+ ##############################################################################################################################################################################################################################
+            This file is the registration form file of AnimalGrid Method It contains the Name field , Email Field , Userid field , Date of Birth field , Security Question field and Answer field .                    
+                                  
+
+################################################################################################################################################################################################################################
+-->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>  <!-- Header Section begins for html form  -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>New User Registration</title>   <!-- Title tags -->
+
+<!-- Stylesheeets Used for designing the Web page -->
+
+
+<style type="text/css">
+.form-horizontal {
+    margin:250;
+    padding:5;
+}
+input {
+    padding:2px;
+    width:200px;
+}
+textarea {
+    padding:2px;
+    width:200px;
+    height:100px;
+}
+.button {
+    width:60px;
+}
+p {
+    margin:0 0 5px 0;
+    padding:0;
+}
+.error {
+    color:#FF0000;
+    margin:0 0 10px 0;
+}
+.accept {
+    color:#339966;
+    margin:0 0 10px 0;
+}
+#forgot{
+  text-decoration: none;
+}
+#login{
+  text-decoration: none;
+   float : right;
+}
+
+.center {
+   
+    width: 80%;
+    border: 3px solid #73AD21;
+    padding: 2em;
+}
+.middle{
+  text-align: center;
+  margin-top: 2px;
+}
+body {margin: 0;}
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.topnav li a:hover:not(.active) {background-color: #111;}
+
+ul.topnav li a.active {background-color: #4CAF50;}
+
+ul.topnav ul.right {
+    float: right;
+    list-style-type: none;
+}
+
+@media screen and (max-width: 600px){
+    ul.topnav ul.right, 
+    ul.topnav li {float: none;}
+}
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="wz_jsgraphics.js"></script>
+
+
+<!--  ############################################################################################################################################
+   The following code is in the page header. The GetCoordinates function uses the window.event method to find the coordinates of the mouse  when it is clicked. 
+   
+   It also needs to take into account any scrolling and the position of the image inside the document so that the coordinates are always relative to the top left of the image. The FindPosition function finds the position of the image tag within the page.
+    
+    Different browsers define the position of an element in slightly different ways but this method will work in both Internet Explorer and Firefox.
+    
+    $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+-->
+<script type="text/javascript">
+var PosX = 0;   // a variable to keep track of mouse clicked position on X-axis 
+var PosY = 0;   // a variable to keep track of mouse clicked position on Y-axis 
+
+var number = new Array();  // an array to store the grid points 
+var combine = new Array({});
+var count= 0;  // Counter on number of points
+var id = 0;  // Acting as primary id
+var numb = 0;    // a variable to store grid point value 
+var counter1 = 0; // Counter on grid passpoints
+var counter2 = 0; // Counter on grid passpoints
+
+
+
+$(document).ready(function(){
+   
+$("#submit").click(function(){
+     var name = document.getElementById('name').value;
+   var userId = document.getElementById('userId').value;
+    var email = document.getElementById('email').value;
+   //  let = document.getElementById('imgId').value;
+     var x1 = PosX;
+    var y1 = PosY;
+    var date = document.getElementById("dob").value;
+    var quest= document.getElementById("Myquest").value; 
+    var answer = document.getElementById("answer").value;
+    var flag = false;
+
+ $.ajax(
+    {
+    url: "gridInfo.php",
+    type: "POST",
+
+    data: { postname:name,postuserid:userId,postemail:email,postdate:date, postgrid : number, postquest:quest, postanswer:answer ,postcom:combine},
+    success: function (data ,status) {
+          // alert("Data: " + data + "\nStatus: " + status);
+        //    window.location.href = "http://localhost/B.php";
+
+          $("#result").html(data);
+
+    }
+ });  
+
+   });
+  });
+
+ 
+ var l = "";
+ 
+     
+ 
+function FindPosition(oElement)
+{ // start of FindPosition
+  if(typeof( oElement.offsetParent ) != "undefined")
+  {
+    for(var posX = 0, posY = 0; oElement; oElement = oElement.offsetParent)
+    {
+      posX += oElement.offsetLeft;
+      posY += oElement.offsetTop;
+    }
+      return [ posX, posY ];
+    }
+    else
+    {
+      return [ oElement.x, oElement.y ];
+    }
+} // end of FindPosition
+
+function GetCoordinates(e)
+{  // start of GetCoordinates
+
+  
+  var ImgPos;
+
+  ImgPos = FindPosition(myImg);
+  if (!e) var e = window.event;
+  if (e.pageX || e.pageY)
+  {
+    PosX = e.pageX;
+    PosY = e.pageY;
+  }
+  else if (e.clientX || e.clientY)
+    {
+      PosX = e.clientX + document.body.scrollLeft
+        + document.documentElement.scrollLeft;
+      PosY = e.clientY + document.body.scrollTop
+        + document.documentElement.scrollTop;
+    }
+  PosX = PosX - ImgPos[0];
+  PosY = PosY - ImgPos[1];
+
+  document.getElementById("x").innerHTML = PosX;
+  document.getElementById("y").innerHTML = PosY;
+   
+    // Get coordinates of stroke in numberbets images
+     var digit = document.getElementById("num");
+     digit.onmousedown = GetCoordinates;
+   
+ 
+ // An event occurs when Mouse is clicked on the animal image 
+  document.getElementById("imgId").addEventListener("click" , bool);
+
+ // An event occurs when Mouse is clicked on the number image 
+  document.getElementById("num").addEventListener("click" , grid);
+
+   // An if Condition to check wheteher the mouse is clciked on this position or not and then assign it the value of // that number which appears on the number image
+
+   if(PosX>=304 && PosX <= 352 && PosY >= 5 && PosY <= 35) {
+        var message = "You have selected 23";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 23;
+     // number.push(23);
+        id = 1;
+   }
+
+     else if(PosX>=365 && PosX <= 412 && PosY >= 5 && PosY <= 35) {
+        var message = "You have selected 24";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 24;
+      //  number.push(24);
+        id = 2;
+   }
+    
+    else if(PosX>=420 && PosX <= 468 && PosY >= 5 && PosY <= 35) {
+        var message = "You have selected 25";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 25;
+     //  number.push(25);
+        id = 3;
+   }
+
+    else if(PosX>=478 && PosX <= 522 && PosY >= 5 && PosY <= 35) {
+        var message = "You have selected 26";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 26;
+     // number.push(26);
+        id = 4;
+   }
+
+    else if(PosX>=544 && PosX <= 590 && PosY >= 5 && PosY <= 35) {
+        var message = "You have selected 27";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 27;
+    //  number.push(27);
+        id = 5;
+   }
+
+   else if(PosX>=304 && PosX <= 352 && PosY >= 45 && PosY <= 75) {
+        var message = "You have selected 6";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 6;
+     // number.push(6);
+        id = 6;
+   }
+
+   else if(PosX>=375 && PosX <= 400 && PosY >= 45 && PosY <= 75) {
+        var message = "You have selected 7";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 7;
+     //  number.push(7);
+        id = 7;
+   }
+
+    else if(PosX>=430 && PosX <= 460 && PosY >= 45 && PosY <= 75) {
+        var message = "You have selected 8";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 8;
+    //  number.push(8);
+        id = 8;
+   }
+    
+    else if(PosX>=492 && PosX <= 516 && PosY >= 45 && PosY <= 75) {
+        var message = "You have selected 9";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 9;
+   //  number.push(9);
+        id = 9;
+   }
+   
+   else if(PosX>=552 && PosX <= 598 && PosY >= 45 && PosY <= 75) {
+        var message = "You have selected 10";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 10;
+    //  number.push(10);
+        id = 10;
+   }
+
+   else if(PosX>=308 && PosX <= 352 && PosY >= 90 && PosY <= 115) {
+        var message = "You have selected 12";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 12;
+     //   number.push(12);
+        id = 12;
+   }
+   
+
+   else if(PosX>=365 && PosX <= 410 && PosY >= 90 && PosY <= 115) {
+        var message = "You have selected 13";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 13;
+    //  number.push(13);
+        id = 13;
+   }
+  
+   else if(PosX>=422 && PosX <= 468  && PosY >= 90 && PosY <= 115) {
+        var message = "You have selected 14";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 14;
+    //  number.push(14);
+        id = 14;
+   }
+
+   else if(PosX>=478 && PosX <= 522 && PosY >= 90 && PosY <= 115) {
+        var message = "You have selected 15";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 15;
+    //  number.push(15);
+        id = 15;
+   }
+
+   else if(PosX>=545 && PosX <= 590 && PosY >= 90 && PosY <= 115) {
+        var message = "You have selected 16";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 16;
+     //   number.push(16);
+        id = 16;
+   }
+
+   else if(PosX>=308 && PosX <= 352 && PosY >= 125 && PosY <= 155) {
+        var message = "You have selected 17";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 17;
+     //   number.push(17);
+        id = 17;
+   }
+
+   else if(PosX>=365 && PosX <= 408 && PosY >= 125 && PosY <= 155) {
+        var message = "You have selected 18";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 18;
+   //   number.push(18);
+        id = 18;
+   }
+
+   else if(PosX>=435 && PosX <= 456 && PosY >= 125 && PosY <= 155) {
+        var message = "You have selected 0";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 0;
+    //   number.push(0);
+        id = 19;
+   }
+
+   else if(PosX>=492 && PosX <= 510 && PosY >= 125 && PosY <= 155) {
+        var message = "You have selected 1";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 1;
+    //  number.push(1);
+        id = 20;
+   }
+
+   else if(PosX>= 548 && PosX <= 570 && PosY >= 125 && PosY <= 155) {
+        var message = "You have selected 2";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 2;
+    //  number.push(2);
+        id = 21;
+   }
+
+   else if(PosX>=308 && PosX <= 330 && PosY >= 170 && PosY <= 195) {
+        var message = "You have selected 3";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 3;
+    //    number.push(3);
+        id = 22;
+   }
+    
+    else if(PosX>=376 && PosX <= 405 && PosY >= 170 && PosY <= 195) {
+        var message = "You have selected 4";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 4;
+    //    number.push(4);
+        id = 23;
+   }
+
+    else if(PosX>=435 && PosX <= 460 && PosY >= 170 && PosY <= 195) {
+        var message = "You have selected 5";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 5;
+    //  number.push(5);
+        id = 24;
+   }
+
+    else if(PosX>=485 && PosX <= 525 && PosY >= 170 && PosY <= 195) {
+        var message = "You have selected 19";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 19;
+    //   number.push(19);
+        id = 25;
+   }
+
+    else if(PosX>=552 && PosX <= 595 && PosY >= 170 && PosY <= 195) {
+        var message = "You have selected 20";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 20;
+    //  number.push(20);
+        id = 26;
+   }
+
+    else if(PosX>=308 && PosX <= 352 && PosY >= 208 && PosY <= 235) {
+        var message = "You have selected 21";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 21;
+    //    number.push(21);
+        id = 27;
+   }
+
+   else if(PosX>=365 && PosX <= 410 && PosY >= 208 && PosY <= 235) {
+        var message = "You have selected 22";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 22;
+    //  number.push(22);
+        id = 28;
+   }
+
+   else if(PosX>=452 && PosX <= 478 && PosY >= 208 && PosY <= 235) {
+        var message = "You have selected 28";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 28;
+    //    number.push(28);
+        id = 29;
+   }
+
+   else if(PosX>=490 && PosX <= 535 && PosY >= 208 && PosY <= 235) {
+        var message = "You have selected 29";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 29;
+    //    number.push(29);
+        id = 30;
+   }
+
+   else if(PosX>=548 && PosX <= 590 && PosY >= 208 && PosY <= 235) {
+        var message = "You have selected 30";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 30;
+    //    number.push(30);
+        id = 31;
+   }
+
+   else if(PosX>=308 && PosX <= 352 && PosY >= 260 && PosY <= 285) {
+        var message = "You have selected 31";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 31;
+    //    number.push(31);
+        id = 32;
+   }
+     
+     else if(PosX>=365 && PosX <= 410 && PosY >= 260 && PosY <= 285) {
+        var message = "You have selected 32";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 32;
+    //  number.push(32);
+        id = 33;
+   }
+
+   else if(PosX>=434 && PosX <= 477 && PosY >= 260 && PosY <= 285) {
+        var message = "You have selected 33";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 33;
+    //    number.push(33);
+        id = 34;
+   }
+
+   else if(PosX>=492 && PosX <= 536 && PosY >= 260 && PosY <= 285) {
+        var message = "You have selected 34";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 34;
+    //    number.push(34);
+        id = 35;
+   }
+
+   else if(PosX>=546 && PosX <= 590 && PosY >= 260 && PosY <= 285) {
+        var message = "You have selected 35";
+        document.getElementById("demo").innerHTML = message;
+        numb = document.getElementById("num");
+        numb.value = 35;
+    //  number.push(35);
+        id = 36;
+     }
+
+ }
+//-->    
+         // Function to check whetehr the mouse is clicked on the first image i.e on animal or outside and 
+         //  return a value based on posistion
+         function bool() {
+        if(PosX>5 && PosX<300 && PosY>2 && PosY<300) {
+          flag = true;
+          count +=1;
+              
+             combine.push({Id:id,x:PosX ,y:PosY}); 
+         
+              if(count >= 3) {
+                alert("You can select maximum two animals Try again!");
+                refreshPage();
+              }
+         
+         /* switch(count) {
+
+            case 1 :  combine.push({Id:id,x1:PosX ,y1:PosY}); 
+          // document.write("First animal has been selected");  break;
+               
+            case 2 :  combine.push({Id:id,x2:PosX ,y2:PosY}); 
+            //  document.write("Second animal has been selected"); break;
+
+            case 3 : combine.push({Id:id ,x3:PosX ,y3:Posy}); 
+             // document.write("Third animal has been selected"); break;
+                      
+           // default : alert("You cant click more than three animals");
+          }
+          
+         */
+
+        } else {
+          flag = false;
+        }
+           return flag;
+         }
+      
+   // Function to be executed in case user clicks on the Grid image
+      function grid() {
+        if(PosX>305 && PosX<595 && PosY>2 && PosY<300) {
+        flag2 = true;
+        counter1 +=1;
+        if(count==1) {
+          if(counter1 <= 3) {
+             number.push(num.value);
+           } // if of counter
+           else {
+            alert("You can choose maximum 3 passpoints on Second Image for each Animal!");
+           }
+        }
+        if(count==2) {
+          counter2 +=1;
+          if(counter2 <= 3) {
+             number.push(num.value);
+           } // if of counter
+           else {
+            alert("You can choose maximum 3 passpoints on Second Image for each Animal!");
+           }
+        }
+        
+        } // end of  if with grid image checking 
+      }
+
+
+          // Function used for refreshing the Page
+         function refreshPage() {
+     alert(" Page is getting Refresh!");
+     window.location.reload();
+ }
+      
+</script>
+
+</head>
+ 
+<body>
+ 
+ <!--  A top navigation bar used for navigating to other webpages -->
+<ul class="topnav">
+     <li><a  href="textPoint.php">TextPoint4CR</a></li>
+  <li><a href="animal.html">ClickAnimal</a></li>
+  <li><a class= "active" href="animalGrid.html">AnimalGrid</a></li>
+  <li><a href="clicktxt.php">ClickText</a></li> 
+  <ul class="topnav right">
+    <li><a class ="active" href="animalGrid.html">Register</a></li>
+    <li><a href="gridLogin.html">Login</a></li>
+  </ul>
+</ul>
+ 
+  <div class ="center">
+<div class="container">
+ 
+  <h2>User Registration</h2>
+  <form class="form-horizontal" name ="catptchaform"role="form">
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="name">Name</label>
+      <div class="col-sm-4">
+        <input type="name" class="form-control" id="name" placeholder="Enter name" required>
+      </div>
+    </div> <br>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="userId">UserId</label>
+      <div class="col-sm-4">
+        <input type="name" class="form-control" id="userId" placeholder="Choose your UserId" required>
+      </div>
+    </div><br>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="email">Email:</label>
+      <div class="col-sm-4">
+        <input type="email" class="form-control" name="email"id="email" placeholder="Enter email" required>
+      </div>
+    </div> <br>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="email">Date of Birth:</label>
+      <div class="col-sm-4">
+        <input type="date" class="form-control" id="dob" placeholder="Enter DOB" required>
+      </div>
+    </div> </br>
+    <div class="form-group">
+     <label class="control-label col-sm-2" for="email">Select Questions for Security:</label> 
+      <div class="col-sm-4">
+         <select id ="Myquest">
+  <option value="1">What is the name of your cat ?</option>
+  <option value="2">who is your favourite TV star ?</option>
+  <option value="3">When was the last time you ate pizza ?</option>
+  <option value="4">what was the name of your first school</option>
+</select> 
+<input type="text" id="answer" placeholder="Answer" required>
+       </div>
+       </div> 
+  </br>
+    <p>First Select an animal and then click on the Second Image to select Your Passpoints</p>
+    <br />
+    <img id = "imgId" width = "300" height="300" alt ="animal Image" src="animal.jpg"/>
+      <img id ="num"  width = "300" height="300"  alt ="grid Image"src="animalGrid2.jpg"/>
+   
+         
+    <br>
+    
+    <br>
+    </br>
+</br>
+   <p> <input type="button" id="submit"  value="Submit"/>    <input type="button" id="cancel" onclick="refreshPage();"value="Cancel" /></p>
+
+</form>
+</div>
+   <div id ="result"></div> 
+   
+  
+<!--  ###############################################################################################################################################
+     The image needs an ID which is used in the code. The Javascript defines the function that will run when the mouse down event fires. The span blocks are used to display the coordinates. 
+
+  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+--> 
+<script type="text/javascript" >
+var myImg = document.getElementById("imgId");
+myImg.onmousedown = GetCoordinates;
+   // var coords = "X coords: " + x + ", Y coords: " + y;
+  //  document.getElementById("demo").innerHTML = coords;
+     
+  
+   // Get coordinates of stroke in alphabets images
+    
+   
+</script>
+
+<br>
+<br>
+<p>X:<span id="x"></span></p>
+<p>Y:<span id="y"></span></p>
+<br />
+
+<p> Demo : <span  id="demo"></span></p>
+
+
+</body>
+</html>
